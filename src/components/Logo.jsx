@@ -9,23 +9,17 @@ function LogomarkPaths() {
 
 export function Logomark(props) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 36 36" fill="none" {...props}>
-      <LogomarkPaths />
-    </svg>
+    <span {...props}>CSGO-TRACKER</span>
   )
 }
 
 export function Logo(props) {
   return (
-    <div className="inline-flex overflow-hidden">
-      <div>
-        <svg aria-hidden="true" viewBox="0 0 52 30" fill="none" {...props}>
-          <LogomarkPaths />
-        </svg>
-      </div>
-      <div>
-        <span className="text-xl text-white font-bold">CSGO-TRACKER</span>
-      </div>
+    <div {...props}>
+      <svg aria-hidden="true" viewBox="0 0 42 30" fill="none" {...props}>
+        <LogomarkPaths />
+      </svg>
+      <span className="text-xl lg:text-3xl text-cyan-500 font-bold">CSGO-TRACKER</span>
     </div>
   )
 }

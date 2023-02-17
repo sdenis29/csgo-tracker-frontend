@@ -7,20 +7,32 @@ import { Button } from '@/components/Button'
 import { HeroBackground } from '@/components/HeroBackground'
 import blurCyanImage from '@/images/blur-cyan.png'
 import blurIndigoImage from '@/images/blur-indigo.png'
+import useSWR from 'swr'
+
+export const HOME_URL = `${process.env.NEXT_PUBLIC_API_URL}`
+
+const useDetails = () => {
+  const fetcher = async url => {
+    const res = await fetch(url);
+    if (!res.ok) {
+      const error = new Error('An error occurred while fetching the data.')
+      error.info = await res.json()
+      error.status = res.status
+      throw error
+    }
+    return res.json().then(data => data)
+  }
+  const { data, error } = useSWR(HOME_URL, fetcher)
+  return {
+    details: data,
+    error: error && error.message,
+  }
+}
 
 const codeLanguage = 'javascript'
-const code = `export server {
-  name: 'BETIVII.LALEAGANE.RO',
-  players: {
-    online: 12,
-    maximum: 48,
-  },
-  map: 'de_dust2',
-}`
-
 const tabs = [
   { name: 'csgotracker.js', isActive: true },
-  { name: 'betivii.json', isActive: false },
+  { name: 'betiviiV2.json', isActive: false },
 ]
 
 function TrafficLightsIcon(props) {
@@ -34,6 +46,15 @@ function TrafficLightsIcon(props) {
 }
 
 export function Hero() {
+  const { details, error } = useDetails()
+  const code = `export server {
+  name: 'BETIVII.LALEAGANE.RO',
+  players: {
+    online: ${details && details.players},
+    maximum: 48,
+  },
+  map: '${details && details.map}',
+}`
   return (
     <div className="overflow-hidden bg-slate-900 dark:-mb-32 dark:mt-[-4.5rem] dark:pb-32 dark:pt-[4.5rem] dark:lg:mt-[-4.75rem] dark:lg:pt-[4.75rem]">
       <div className="py-16 sm:px-2 lg:relative lg:py-20 lg:px-0">
@@ -58,7 +79,7 @@ export function Hero() {
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <Button href="/">Conectare Directa</Button>
                 <Button href="/" variant="secondary">
-                  Jucatori Online
+                  Vrei sa ajuti comunitatea? Vino in echipa noastra {'>>'}
                 </Button>
               </div>
             </div>

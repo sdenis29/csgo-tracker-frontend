@@ -7,6 +7,11 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
+  webpack(config) {
+    config.experiments = { ...config.experiments, topLevelAwait: true }
+    config.resolve.fallback = { fs: false };
+    return config
+  },
 }
 
 module.exports = withMarkdoc()(nextConfig)
